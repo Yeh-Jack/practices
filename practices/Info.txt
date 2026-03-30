@@ -1,0 +1,29 @@
+--------- python線上學習網站 ---------
+【python官網】
+
+	https://docs.python.org/3/
+
+【w3school】
+
+	https://www.w3schools.com/
+
+【steam教育學習網】
+
+	https://steam.oxxostudio.tw/category/python/index.html
+
+【菜鳥教程】
+
+	https://www.runoob.com/python3/python3-tutorial.html
+
+【stack overflow】
+
+	https://stackoverflow.com/questions
+
+
+Class material :
+
+	https://reurl.cc/vEd7We
+
+Google Meet :
+
+	https://meet.google.com/gij-beyf-jxa
