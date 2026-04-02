@@ -1,0 +1,15 @@
+services:
+  db:
+    image: mariadb:12.2.2-noble
+    container_name: maria
+    hostname: maria
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: RootP@ss4_Db
+      MARIADB_USER: jack
+      MARIADB_PASSWORD: jackP@ss
+      MARIADB_DATABASE: exmple
+    ports:
+      - "3306:3306"
+    volumes:
+      - /docker/volume/maria/data:/var/lib/mysql

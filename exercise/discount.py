@@ -9,4 +9,4 @@ elif amount >= 25000:
 elif amount >= 10000:
     amount *= 0.95
 
-print(f"則扣後價格為：{amount}")
+print(f"{int(amount)}")
