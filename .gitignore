@@ -1,5 +1,7 @@
 .opencode
+.venv
 bun.lock
+data
 node_modules
 opencode.json
 package.json

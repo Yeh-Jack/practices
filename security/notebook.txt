@@ -1,0 +1,6 @@
+instruction function
+==============================================================
+info        Works like man
+less        Like 'more' but capable for page up / down.
+who         List login users.
+tar         Compress files, option 'z' for gzip, 'j' for bzip2.

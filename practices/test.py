@@ -134,3 +134,117 @@ SKIP_ONE_LINE = "\n\n"
 # firstOne = lst5.pop(0)
 # lastOne = lst5.pop()
 # print(f"First = {firstOne}, last = {lastOne}, remaind = {lst5}", end=SKIP_ONE_LINE)
+
+# --- List (array) and tuple
+# import copy
+
+# lst1 = [[1, 2, 3], True, 3.14, "Good"]
+# lst2 = lst1.copy()
+# print(f"Original lists with shallow copy :\nlst1 = {lst1}\nlst2 = {lst2}")
+# lst2[0][1] = 3
+# lst2[0][2] = 5
+# print(f"Modify on lst2 :\nlst1 = {lst1}\nlst2 = {lst2}", end=SKIP_ONE_LINE)
+
+# lst1 = [[1, 2, 3], True, 3.14, "Good"]
+# lst2 = copy.deepcopy(lst1)
+# print(f"Original lists with deep copy :\nlst1 = {lst1}\nlst2 = {lst2}")
+# lst2[0][1] = 3
+# lst2[0][2] = 5
+# print(f"Modify on lst2 :\nlst1 = {lst1}\nlst2 = {lst2}", end=SKIP_ONE_LINE)
+
+# --- Random number
+# import random
+
+# random.seed("test")
+# print(random.random())
+# random.seed("test")
+# print(random.random())
+
+# if __name__ == "__main__":
+#     print("This is the main entrance.")
+# else:
+#     print("This is NOT the main entrance.")
+
+# --- Open file
+# # Write mode : 'w' for replace mode, 'a' for append mode.
+# file = open("./data/out.txt", "a")
+# file.write("Hello!!\n")
+# # Declare 'r' before Windows file name for 'raw string' mode.
+# # print("Hello!!", file=open(r"C:\Python\out.txt", "w"))
+# file.close()
+
+# # Open file by 'with' : the file automatically closed in the end of the block.
+# with open("./data/out.txt", "a") as file:
+#     file.write("Hello!!\n")
+
+# --- Exception handling
+# a = input("Number A: ")
+# b = input("Number B: ")
+
+# try:
+#     print(int(a) / int(b))
+# except ValueError:
+#     print("It's not integer number.")
+# except ZeroDivisionError:
+#     print("Divided by 0")
+# except BaseException as e:
+#     print(f"Unable to calculate. {e.__class__.__name__}: {e}")
+
+# print("Finish.")
+
+# --- Read CSV file
+# import csv
+
+# path = "./data/csv/"
+# maleRows = []
+
+# def extract(row, extCol):
+#     data = []
+#     for i in extCol:
+#         data.append(row[i])
+#     return data
+
+# try:
+#     with open(path + "Titanic.csv", encoding="UTF-8") as file:
+#         all = list(csv.reader(file))
+#         extCol = [2, 4, 7, 9]
+
+#         row = all[0]
+#         maleRows.append(extract(row, extCol))
+
+#         for row in all:
+#             if row[3] == "male" and row[10] == "Q":
+#                 maleRows.append(extract(row, extCol))
+
+#     print(
+#         f"There was {len(maleRows)} male on boarded from 'QueensTown', all passengers = {len(all)-1}.",
+#         end=SKIP_ONE_LINE,
+#     )
+
+#     extractFile = path + "maleQ.csv"
+#     with open(extractFile, "w", encoding="UTF-8") as file:
+#         fw = csv.writer(file)
+#         # fw.writerow(all[0])
+#         fw.writerows(maleRows)
+
+#     print(f"Data extracted and saved to {extractFile}.", end=SKIP_ONE_LINE)
+
+# except BaseException as e:
+#     print(f"Failed on file operation: {e}", end=SKIP_ONE_LINE)
+
+
+# --- Read XML file.
+# import os
+# import xml.etree.ElementTree as ET
+
+# cwd = os.getcwd()
+# print(f"Current working directory: {cwd}")
+
+# path = "./data/xml/"
+# root = ET.parse(path + "宜蘭縣停車場.xml").getroot()
+
+# for row in root.findall("row_item"):
+#     data = []
+#     for col in ["名稱", "編號", "小車位總數", "小車位剩餘數"]:
+#         data.append(row.find(col).text)
+#     print(f"{data[0]}({data[1]})\t小車位數 = {data[3]} / {data[2]}")

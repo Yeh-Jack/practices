@@ -31,3 +31,17 @@ Google Meet :
 課程資料網址 :
 
 	https://shorturl.at/8thle
+
+Free coding models :
+
+	https://github.com/vava-nessa/free-coding-models
+
+NVIDIA Free Models Info Dashboard :
+
+	https://github.com/sherman-yang/nvidia-model-info
+
+OpenRouter Statistics models works on OpenCode :
+
+	https://openrouter.ai/apps?url=https%3A%2F%2Fopencode.ai%2F&ref=maxrohde.com
+
+
