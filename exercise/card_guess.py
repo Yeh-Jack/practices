@@ -30,7 +30,7 @@ while True:
         )
     except Exception as err:
         print(
-            f"您輸入了錯誤的紙牌數字：{pick}，請重新輸入：{err}",
+            f"您輸入了錯誤的紙牌數字：{pick}，或者發生錯誤：{err}，請重新輸入：",
             end="",
         )
 

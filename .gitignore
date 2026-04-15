@@ -1,5 +1,6 @@
 .opencode
 .venv
+__pycache__
 bun.lock
 data
 node_modules
