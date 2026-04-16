@@ -1,0 +1,7 @@
+List.slice() returns a new sliced copy.
+    listData = range(12)
+    sliced = listData[3:] # Slice from index 3 to the end of the list.
+
+NumPy.slice() working on the data itself, no new array returned.
+    npData = np.array(listdata)
+    npSliced = npData[3:]

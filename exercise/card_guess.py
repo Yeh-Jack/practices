@@ -1,7 +1,7 @@
 import random
 
 cards = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
-cardIdx = random.randint(1, 13)
+cardIdx = random.randint(0, 12)
 
 counter = 0
 upper = 12
@@ -9,7 +9,7 @@ lower = 0
 pick = ""
 while True:
     if pick == "":
-        print(f"請輸入紙牌數字：", end="")
+        print("請輸入紙牌數字：", end="")
     pick = input().upper()
 
     try:
@@ -21,7 +21,7 @@ while True:
         elif cardIdx < pickIdx:
             if upper >= pickIdx:
                 upper = pickIdx - 1
-        elif pickIdx < cardIdx:
+        else:
             if lower <= pickIdx:
                 lower = pickIdx + 1
         print(
@@ -33,5 +33,6 @@ while True:
             f"您輸入了錯誤的紙牌數字：{pick}，或者發生錯誤：{err}，請重新輸入：",
             end="",
         )
+        pick = "X"  # In case user inputs "".
 
 print()
