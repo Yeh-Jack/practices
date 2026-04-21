@@ -193,10 +193,10 @@ SKIP_ONE_LINE = "\n\n"
 # print("Finish.")
 
 # --- NumPy
-import numpy as np
+# import numpy as np
 
-d1 = np.arange(20)
-d2 = np.T.reshape(4, 5)
-# d2 = np.view(float).T.reshape(4, 5)
-print(d1, end=SKIP_ONE_LINE)
-print(d2, end=SKIP_ONE_LINE)
+# d1 = np.arange(20)
+# d2 = np.T.reshape(4, 5)
+# # d2 = np.view(float).T.reshape(4, 5)
+# print(d1, end=SKIP_ONE_LINE)
+# print(d2, end=SKIP_ONE_LINE)
