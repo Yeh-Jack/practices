@@ -4,10 +4,19 @@ import json
 import os
 
 SKIP_ONE_LINE = "\n\n"
+# cwd = os.getcwd()
 cwd = os.getcwd() + "/.."
 csvPath = cwd + "/data/csv/"
 jsonPath = cwd + "/data/json/"
 xmlPath = cwd + "/data/xml/"
+
+data = {
+    "Name": ["Adele", "BiBi", "Carol", "David", "Elon", "Frank"],
+    "Country": ["China", "India", "Japan", "Korea", "ROC", "Vienum"],
+    "Score": np.random.randint(60, 100, 6),
+}
+data = pd.DataFrame(data)
+print(f"Source data\n{data}", end=SKIP_ONE_LINE)
 
 # # --- Series
 # data = pd.Series({"a": "Adele", "b": "BiBi", "c": "Carol"})
@@ -78,3 +87,31 @@ xmlPath = cwd + "/data/xml/"
 # print(f"axis = 0: \n{result}", end=SKIP_ONE_LINE)
 # result = pd.concat([df1, df2], axis=1)
 # print(f"axis = 1: \n{result}", end=SKIP_ONE_LINE)
+
+# # --- Filter data
+# pickLoc = data.loc[data["Country"] == "ROC"]
+# pickQuery = data.query("Country == 'ROC'")
+# print(f"pickLoc\n{pickLoc}{SKIP_ONE_LINE}pickQuery\n{pickQuery}", end=SKIP_ONE_LINE)
+
+# filter = 75
+# pickLoc = data.loc[data["Score"] >= filter]
+# pickQuery = data.query("Score >= @filter")
+# print(f"pickLoc\n{pickLoc}{SKIP_ONE_LINE}pickQuery\n{pickQuery}", end=SKIP_ONE_LINE)
+
+# # --- Sort data
+# sort = data.sort_values("Score", ascending=False)
+# print(f"Sorted:\n{sort}", end=SKIP_ONE_LINE)
+# print(f"Top 3:\n{sort.head(3)}", end=SKIP_ONE_LINE)
+
+# --- Grouping data
+titanic = pd.read_csv(csvPath + "Titanic.csv")
+grouped = titanic.groupby(["Pclass", "Sex", "Embarked"])
+groupAge = grouped["Age"].mean()
+pivot = groupAge.unstack(level="Sex")  # Pick a group as level
+print(pivot, end=SKIP_ONE_LINE)
+pivot = groupAge.unstack()  # Level is default to the last group.
+print(pivot, end=SKIP_ONE_LINE)
+
+pivot["Average"] = pivot.mean(axis=1)
+pivot = pivot.reset_index()
+print(pivot, end=SKIP_ONE_LINE)
