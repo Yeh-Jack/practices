@@ -1,7 +1,43 @@
-List.slice() returns a new sliced copy.
+### List.slice() returns a new sliced copy.
     listData = range(12)
     sliced = listData[3:] # Slice from index 3 to the end of the list.
 
-NumPy.slice() working on the data itself, no new array returned.
+### NumPy.slice() working on the data itself, no new array returned.
     npData = np.array(listdata)
     npSliced = npData[3:]
+
+### In general, data range is in the [inclusive, exclusive] form on Python.
+    Special cases which are (inclusive, inclusive):
+    1. Default random module: randint(start, end) (NumPy.random.randint is [inclusive, exclusive]).
+    2. NumPy: linspace(start, end, step).
+    3. Pandas: between(start, end) and loc[start, end] (iloc is [inclusive, exclusive]).
+
+### How async function works
+```
+async def get_video_info(self, youtube_url: str) -> dict:
+  try:
+    loop = asyncio.get_event_loop()
+    return await loop.run_in_executor(None, self._get_info_sync, youtube_url)
+```
+--- The async function works in old fashion (prior 3.10)
+    1. Direct loop access is discouraged
+    2. run_in_executor() is low-level
+
+--- Modern rewrite: use .to_thread() instead which creates another thread to run the assigned job.
+```
+async def get_video_info(self, youtube_url: str) -> dict:
+  try:
+    return await asyncio.to_thread(self._get_info_sync, youtube_url)
+  except Exception as e:
+    logger.error(f"Failed to get video info: {e}")
+    return {"title": "Unknown", "duration": 0.0}
+```
+    Cleaner and:
+    1. No manual loop handling
+    2. Less error-prone
+    3. Matches modern async style
+
+    One more subtle point (important): The use case is correct:
+    1. yt_dlp is blocking
+    2. Running it directly in async code would freeze the event loop (thread).
+    3. So even in modern code, you must offload it—just with a better tool (to_thread).
