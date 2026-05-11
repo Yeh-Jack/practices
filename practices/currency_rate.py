@@ -1,6 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+from dotenv import load_dotenv
+import os, getpass
 
 # import datetime
 import MySQLdb
@@ -55,15 +57,22 @@ for i in range(len(currency)):
 #      將資料寫入資料庫
 # ==============================
 
+# 讀取帳密(優先從環境變數存取，不存在才互動式要求）
+DB_HOST = os.environ.get("DB_HOST", "localhost")
+DB_PORT = int(os.environ.get("DB_PORT", 3306))
+DB_USER = os.environ.get("DB_USER") or input("DB user: ")
+DB_PASSWORD = os.environ.get("DB_PASSWORD") or getpass.getpass("DB password: ")
+DB_NAME = os.environ.get("DB_NAME", "testdb")
+
 try:
     # 開啟資料庫連接
     conn = MySQLdb.connect(
-        host="127.0.0.1",  # 主機ip
-        user="jack",  # 帳號
-        password="jack",  # 密碼
-        port=3306,  # 通訊埠
-        database="testdb",  # 資料庫
-        charset="utf8",  # 資料庫編碼
+        host=DB_HOST,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        port=DB_PORT,
+        database=DB_NAME,
+        charset="utf8",
     )
 
     # 使用cursor()方法操作資料庫
