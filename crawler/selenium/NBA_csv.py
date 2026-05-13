@@ -1,62 +1,82 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
-import pandas as pd
-import time
 from io import StringIO
-import MySQLdb
+import os, time
+import pandas as pd
+
+# Create folder if it doesn't exist
+DATA_PATH = "data/csv/nba"
+os.makedirs(DATA_PATH, exist_ok=True)
 
 try:
-  
     driver = webdriver.Chrome()
     driver.implicitly_wait(5)
     driver.get("https://www.nba.com/stats/players/traditional")
     # driver.maximize_window()    # 將視窗最大化
-    
+
     time.sleep(2)
     # 把cookie畫面取消掉
-    cookie = driver.find_element(By.XPATH, '/html/body/div[2]/div[2]/div/div[1]/div/div[2]/div/button[1]')
-    cookie.click()
-    time.sleep(2)
-    # 滑鼠滾輪往下滾300像素
+    driver.find_element(By.ID, "onetrust-accept-btn-handler").click()
+    time.sleep(1)
+    # 滑鼠滾輪往下滾300像素 (to avoid data table is covered by advertisement window).
     driver.execute_script("window.scrollTo(0,300)")
-    
+
     page = 1
-    
-    while True:        
+    # Crawl all pages.
+    while True:
+        time.sleep(1)
+        # Remove advertisement
+        try:
+            # Try to get the non-blocking advertisement window if exists.
+            driver.find_element(By.CSS_SELECTOR, "#bx-close-inside-3074827")
+
+            # Try to remove the non-blocking advertisement window.
+            i = 0
+            while i < 5:
+                try:
+                    # Remove the non-blocking advertisement window.
+                    driver.find_element(
+                        By.CSS_SELECTOR, "#bx-close-inside-3074827"
+                    ).click()
+                    print("--> Non-blocking advertisement removed !!!")
+                    break
+                except Exception as e:
+                    time.sleep(1)  # If failed to remove, wait for 1 second and retry.
+                finally:
+                    i += 1
+        except Exception as err:
+            page = page
+        finally:
+            print(f"Parsing page {page} ...")
         soup = BeautifulSoup(driver.page_source, "lxml")
-        
-        # 確認目前總頁數
-        pageloc = soup.find("div", {"class":"Pagination_content__xgsey Crom_cromSetting__Md_cl"})
-        page_num = pageloc.find_all("div")
-        totalpage = page_num[6].text.split(" ")[1]
-      
+
         # 先找到存放NBA球員資料的table
-        table = soup.select_one("#__next > div.Layout_base__7MdPl > div.Layout_mainContent__Gr_Jz > div.MaxWidthContainer_mwc__ChCs_ > section.Block_block__R72zC.nba-stats-content-block > div > div.Crom_base__heTBP > div.Crom_container__kd1FW.crom-container > table")
-        
+        table = soup.find("table", class_="Crom_table__PJugT")
+
         # 將球員資料放到dataframe中再寫成csv檔
         df = pd.read_html(StringIO(str(table)))
-        df[0].to_csv("NBA球員資料第%d頁.csv" %page)
-        print("正在儲存第%d頁..." %page)               
-        
+        df[0].to_csv(f"{DATA_PATH}/NBA球員資料第{page}頁.csv")
+        print(f"--> 已儲存第 {page} 頁.")
+
         try:
-            # csv檔下載完畢後等待2秒再按下下一頁的按鈕
-            time.sleep(4)    
-            driver.find_element(By.XPATH, '//*[@id="__next"]/div[2]/div[2]/div[3]/section[2]/div/div[2]/div[2]/div[1]/div[5]/button[2]').click()
-            
+            # Get page operation buttons group.
+            pageOps = driver.find_elements(By.CLASS_NAME, "Pagination_button__7JMDL")
+            nextPage = pageOps[1]  # [0] is backward, [1] is forward.
             # 判定是否按到最後一頁
-            if page < int(totalpage):
-                page += 1                
+            if nextPage.is_enabled():
+                nextPage.click()
+                page += 1
                 continue
             else:
                 print("下載完畢")
                 break
-        
+
         except Exception as e:
-            print("下載失敗：", e)    
-                                       
+            print("下載失敗：", e)
+
 except Exception as e:
     print("爬取失敗：", e)
 
 finally:
-    driver.quit() 
+    driver.quit()

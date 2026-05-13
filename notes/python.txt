@@ -41,3 +41,5 @@ async def get_video_info(self, youtube_url: str) -> dict:
     1. yt_dlp is blocking
     2. Running it directly in async code would freeze the event loop (thread).
     3. So even in modern code, you must offload it—just with a better tool (to_thread).
+
+### PyInstaller package could wrap a Python program to a .exe execution file for running on Windows.

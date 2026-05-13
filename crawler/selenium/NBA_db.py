@@ -41,9 +41,7 @@ try:
 
     time.sleep(2)
     # 把cookie畫面取消掉
-    cookie = driver.find_element(
-        By.XPATH, "/html/body/div[2]/div[2]/div/div[1]/div/div[2]/div/button[1]"
-    )
+    cookie = driver.find_element(By.ID, "onetrust-accept-btn-handler")
     cookie.click()
     time.sleep(2)
     # 滑鼠滾輪往下滾300像素
@@ -51,6 +49,10 @@ try:
 
     page = 1
     while True:
+        # Remove propaganda
+        prop = driver.find_element(By.CSS_SELECTOR, "#bx-close-inside-3074827")
+        if not prop is None:
+            prop.click()
         soup = BeautifulSoup(driver.page_source, "lxml")
 
         # 確認目前總頁數

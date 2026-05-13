@@ -3,6 +3,7 @@
 __pycache__
 bun.lock
 data
+inst
 node_modules
 opencode.json
 package.json
