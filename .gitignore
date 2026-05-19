@@ -7,3 +7,5 @@ inst
 node_modules
 opencode.json
 package.json
+
+*.db

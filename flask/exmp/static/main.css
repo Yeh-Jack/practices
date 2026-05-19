@@ -1,0 +1,23 @@
+.mh{
+	padding:60px;
+	text-align:center;
+	background:#1abc9c;
+	color:white;
+	font-size:30px;	
+}
+
+.bh{
+	padding:100px;
+	text-align:center;
+	background:#1abc9c;
+	color:blue;
+	font-size:20px;	
+}
+
+.ch{
+	padding:20px;
+	text-align:center;
+	background:#1abc9c;
+	color:red;
+	font-size:10px;	
+}
