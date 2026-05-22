@@ -1,0 +1,37 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>
+		{% if rows|length == 1 %}
+    		BMI Advisor for {{ rows[0]["name"] }}
+		{% else %}
+    		BMI Advisor's users list
+		{% endif %}
+</title>
+</head>
+	<body>
+	   <table border=1>
+		   <thead>
+			 <td>姓名</td>
+			 <td>性別</td>
+			 <td>身高</td>
+			 <td>體重</td>
+			 <td>BMI</td>
+			 <td style="width=40%">建議</td>
+		   </thead>
+		   <tbody>
+	    	 {% for row in rows %}
+		   		<tr>
+					<td>{{row["name"]}}</td>
+					<td>{{row["gender"]}}</td>
+					<td>{{ "%.2f"|format(row["height"]) }}</td>
+					<td>{{ "%.2f"|format(row["weight"]) }}</td>
+					<td>{{ "%.2f"|format(row["bmi"]) }}</td>
+					<td>{{row["advise"]}}</td>
+		   		</tr>
+         	 {%endfor%}
+		   </tbody>
+		 </table>
+		 <a href="/">返回主頁</a>
+	 </body>
+</html>

@@ -1,0 +1,30 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title> Flask template list</title>
+
+</head>
+	<body>
+	 
+	   <table border =1>
+		   <thead>
+			 <td>姓名</td>
+			 <td>地址</td>
+			 <td>城市</td>
+			 <td>郵遞區號</td>
+
+		   <thead>
+	   
+	    {% for row in rows %}
+		   <tr>
+				<td>{{row["name"]}}</td>
+				<td>{{row["addr"]}}</td>
+				<td>{{row["city"]}}</td>
+				<td>{{row["pin"]}}</td>
+		   </tr>
+         {%endfor%}
+		 </table>
+		 <a href="/">返回主頁</a>
+	   
+	 </body>
+</html>
