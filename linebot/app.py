@@ -3,15 +3,16 @@ from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import *
+import os
 
 app = Flask(__name__)
 
 # Channel Access Token
-line_bot_api = LineBotApi(
-    "RKbQi93iMFkjG4gzEufbKfc1eHWVDNpfdnAlwolcYwPOAeYVjpTycgzxAV3XfQmrigCZaSTGE2RnFKDv9tzV1/eaBy1ODl4yZotcFQpH8pwhqhuGVSMJNMzZnJlmBVS2n0Ib2alhTaaSY4kXQnpGtwdB04t89/1O/w1cDnyilFU="
-)
+LINE_TOKEN = os.environ.get("LINE_TOKEN")
+line_bot_api = LineBotApi(LINE_TOKEN)
 # Channel Secret
-handler = WebhookHandler("52e5c8d6bc6f110a13486f3db80acf6b")
+LINE_HOOK_SECRET = os.environ.get("LINE_HOOK_SECRET")
+handler = WebhookHandler(LINE_HOOK_SECRET)
 
 
 # 監聽所有來自 /hook 的 Post Request

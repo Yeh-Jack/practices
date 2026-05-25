@@ -5,15 +5,22 @@ from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import *
+import os
 
 app = Flask(__name__)
 
 # Channel Access Token
-line_bot_api = LineBotApi(
-    "RKbQi93iMFkjG4gzEufbKfc1eHWVDNpfdnAlwolcYwPOAeYVjpTycgzxAV3XfQmrigCZaSTGE2RnFKDv9tzV1/eaBy1ODl4yZotcFQpH8pwhqhuGVSMJNMzZnJlmBVS2n0Ib2alhTaaSY4kXQnpGtwdB04t89/1O/w1cDnyilFU="
-)
+LINE_TOKEN = os.environ.get("LINE_TOKEN")
+line_bot_api = LineBotApi(LINE_TOKEN)
 # Channel Secret
-handler = WebhookHandler("52e5c8d6bc6f110a13486f3db80acf6b")
+LINE_HOOK_SECRET = os.environ.get("LINE_HOOK_SECRET")
+handler = WebhookHandler(LINE_HOOK_SECRET)
+
+
+def buildLocation(latitude, longitude, title="Unknow", address="Unknown"):
+    return LocationSendMessage(
+        title=title, address=address, latitude=latitude, longitude=longitude
+    )
 
 
 def buildSticker(packageId, stickerId):
@@ -49,8 +56,13 @@ def handle_message(event):
     messages = [
         buildText(f"> {client_message} !!"),
         buildSticker("11537", "52002734"),
-        buildSticker("2", "46"),
-        buildSticker("4", "618"),
+        buildLocation(25.032977597205768, 121.52808257163666),
+        buildLocation(
+            25.034571833791116,
+            121.53233119127395,
+            title="鼎泰豐 新生店",
+            address="臺北市中正區三愛里信義路二段277號",
+        ),
     ]
     line_bot_api.reply_message(event.reply_token, messages)
 
