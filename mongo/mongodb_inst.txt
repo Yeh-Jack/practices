@@ -1,0 +1,156 @@
+//查詢port
+db.adminCommand({ getCmdLineOpts: 1 }).parsed.net.port
+
+
+//創建root最高權限
+db.createUser({
+  user: "root",
+  pwd: "RootP@ss4_Db",
+  roles: [
+    { role: "root", db: "admin" }]
+})
+
+
+//用最高權限root登入
+mongosh -u 帳號名 -p 密碼 --authenticationDatabase 認證資料庫
+mongosh -u root -p RootP@ss4_Db --authenticationDatabase admin
+
+
+//查詢MongoDB是否有開啟驗證
+db.runCommand({ connectionStatus: 1 }).authInfo
+
+
+//建立帳號marine，可以讀寫mydb資料庫內所有表
+db.createUser({
+  user: "jack",		// 帳號
+  pwd: "jack",		// 密碼
+  roles: [				// 指定繼承MongoDB內建角色readWrite，作用範圍僅限mydb資料庫
+    { role: "readWrite", db: "mydb" }
+  ]
+})
+
+
+// 建立角色readEmpOnly，僅能查詢mydb資料庫中的emp集合
+db.createRole({
+  role: "readEmpOnly",
+  privileges: [
+    {
+      resource: { db: "mydb", collection: "emp" },
+      actions: [ "find" ]  // 權限設定，例如find、insert、update...
+    }
+  ],
+  roles: []
+})
+
+// 建立帳號gigi，指定繼承自定義角色readEmpOnly，作用範圍為mydb
+db.createUser({
+  user: "gigi",
+  pwd: "12345678",
+  roles: [
+    { role: "readEmpOnly", db: "mydb" }
+  ]
+})
+
+//刪除使用者
+db.dropUser("使用者名稱")
+
+//查詢目前使用者
+db.getUsers()
+
+
+//查詢目前擁有的資料庫
+show dbs
+
+//切換資料庫
+use testdb
+
+//創建集合
+db.createCollection("集合名稱")
+
+//刪除集合
+db.集合名.drop()
+
+
+//新增一筆記錄(創建集合)
+db.集合名.insert({資料})
+db.studentFile.insertOne({
+	id:1, 
+	name:"lisa"
+})
+
+db.studentFile.insertOne({
+	id:2, 
+	name:"小花"
+})
+
+//查詢目前有哪些集合
+show collections
+
+//查詢指定集合中的所有資料
+db.集合名.find()
+db.studentFile.find()
+
+//查詢指定集合的指定資料
+db.集合名.find({查詢條件})
+db.studentFile.find({id:1})
+
+//查詢指定欄位 SELECT empno, ename, salary FROM emp
+db.emp.find({},             // 查詢條件，沒寫等同於沒寫WHERE子句
+	        {"empno": 1,    // 1表示包含此欄位
+             "ename": 1, 
+             "salary": 1,
+             "_id": 0})     // 0表示排除此欄位(MongoDB 預設會包含 _id，通常需要手動排除)
+
+
+//查詢指定欄位 SELECT empno, ename, salary FROM emp WHERE deptno = 20
+db.emp.find({"deptno": 20},             
+	        {"empno": 1,    
+             "ename": 1, 
+             "salary": 1,
+             "_id": 0})     
+
+
+//聚合框架查詢SELECT empno, ename, salary, salary*12 AS '年薪' FROM emp WHERE deptno = 20
+// https://www.mongodb.com/zh-cn/docs/manual/reference/mql/aggregation-stages/
+db.emp.aggregate([
+    // step1：找尋條件(WHERE deptno = 20)
+    {
+        $match: {
+            "deptno": 20
+        }
+    },
+    // step2：投影、選取欄位和計算 (SELECT empno, ename, salary, salary*12 AS '年薪')
+    {
+        $project: {
+            "empno": 1,
+            "ename": 1,
+            "salary": 1,
+            // 計算新欄位 (年薪 = salary * 12)
+            "年薪": { 
+                $multiply: ["$salary", 12] 
+            },
+            "_id": 0 
+        }
+    }
+])
+
+
+
+//新增多筆
+db.集合名.insertMany([{資料},{資料}])
+db.studentFile.insertMany([{id:3, name:"marine"}, {id:4, name:"biboo"}])
+
+//修改單筆資料
+db.集合名.updateOne({修改條件}, {$set:{新的資料}})
+db.studentFile.updateOne({id:2}, {$set:{name:"may"}})
+
+//修改多筆資料
+db.集合名.updateMany({修改條件}, {$set:{新的資料}})
+db.studentFile.updateMany(
+  {},                     // 選取條件{}：表示全部文件
+  { $set: { point: 0 } }  // 更新內容：新增欄位point，值為0
+)
+
+//刪除資料
+db.集合名.deleteOne({資料})
+db.studentFile.deleteOne({id:4})
