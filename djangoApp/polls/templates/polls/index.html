@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Poll Questions</title>
+  </head>
+  <body>
+    <h3>Poll questions :</h3>
+    <p>
+      {% if latest_question_list %}
+        <ul>
+          {% for question in latest_question_list %}
+            <li>
+              <a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No polls are available.</p>
+      {% endif %}
+    </p>
+  </body>
+</html>
